@@ -93,7 +93,7 @@
 /**
  *  添加代理事件
  *
- *  @param Filter 筛选条件字典->key:cid value:filterModels
+ *  @param Filter Dictionary 筛选条件字典->key:cid value:filterModels
  */
 -(void)YWFilterPickerFinishedPickkingFilter:(NSDictionary *)Filter
 {

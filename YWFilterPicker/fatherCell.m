@@ -59,13 +59,7 @@
     lblDetail.font = [UIFont systemFontOfSize:12];
     [self.contentView addSubview:lblDetail];
     self.lblDetail = lblDetail;
-    //分割线
-//    UIView * lineView = [[UIView alloc] init];
-//    lineView.frame = CGRectMake(0, self.frame.size.height, [UIScreen mainScreen].bounds.size.width-50, 1);
-//    NSLog(@"%@",NSStringFromCGRect(lineView.frame));
-//    lineView.backgroundColor = [UIColor lightGrayColor];
-//    NSLog(@"%@",NSStringFromCGRect(self.frame));
-//    [self.contentView addSubview:lineView];
+    
     
 }
 
