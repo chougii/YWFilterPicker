@@ -26,7 +26,7 @@
 @property (nonatomic,strong) NSMutableArray * categorys;
 /**
  *  将数据转化成通用字典类型方便网络传值
- *
+ *=;
  *  @param filters  筛选值数组
  *  @return 字典->[id:filterid]
  */

@@ -27,6 +27,7 @@
 -(instancetype)initWithFatherId:(NSString *)fatherId andFatherName:(NSString *)fathername
 {
     if (self=[super init]) {
+        screenBounds = [UIScreen mainScreen].bounds;
         self.fatherId = fatherId;
         self.filters = [NSMutableArray array];
         self.categorys = [NSMutableArray array];
@@ -110,8 +111,12 @@
     }
     
     [self.delegate seleteFinishedCallBack:self.filters andFatherId:self.fatherId];
+    [UIView animateWithDuration:0.3 animations:^{
+        self.frame = CGRectMake(screenBounds.size.width, 0, 0, screenBounds.size.height);
+    } completion:^(BOOL finished) {
+        [self removeFromSuperview];
+    }];
     
-    [self removeFromSuperview];
 }
 
 -(void)btnCancelClick

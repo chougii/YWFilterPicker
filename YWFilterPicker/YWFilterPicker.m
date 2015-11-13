@@ -17,6 +17,8 @@
 @property (nonatomic,strong) NSIndexPath * currentIndex;
 @property (nonatomic,strong) NSMutableDictionary * allFilters;
 @property (nonatomic,weak) UIView * headerView;
+@property (nonatomic,weak) UIView * coverView;
+@property (nonatomic,assign) BOOL isFirstLayout;
 @end
 @implementation YWFilterPicker
 
@@ -25,31 +27,34 @@
     if (self=[super init]) {
         self.categorys = [NSMutableArray array];
         self.allFilters = [NSMutableDictionary dictionary];
-        
+        _isFirstLayout = YES;
     }
     return self;
 }
 
 -(void)layoutSubviews
 {
-    coverView * view = [[coverView alloc] init];
-    view.frame = CGRectMake([UIScreen mainScreen].bounds.size.width, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
-    
-    
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:0.3];
-    //遮盖层
-    
-    view.frame=[UIScreen mainScreen].bounds;
-    view.backgroundColor = [[UIColor clearColor] colorWithAlphaComponent:0.7];
-    [view addTarget:self action:@selector(coverViewClick:) forControlEvents:UIControlEventTouchUpInside];
-    
-    [UIView commitAnimations];
-    [self.superview addSubview:view];
-    [self.superview bringSubviewToFront:self];
-    
-    [self setupHeaderNavigation];
-    [self setupFilterTable];
+     //遮盖层
+    if (_isFirstLayout) {
+        coverView * view = [[coverView alloc] init];
+        view.frame = CGRectMake([UIScreen mainScreen].bounds.size.width, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
+        
+        
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.3];
+        view.frame=[UIScreen mainScreen].bounds;
+        view.backgroundColor = [[UIColor clearColor] colorWithAlphaComponent:0.7];
+        [view addTarget:self action:@selector(coverViewClick:) forControlEvents:UIControlEventTouchUpInside];
+        self.coverView = view;
+        [UIView commitAnimations];
+        [self.superview addSubview:view];
+        [self.superview bringSubviewToFront:self];
+        
+        [self setupHeaderNavigation];
+        [self setupFilterTable];
+
+    }
+    _isFirstLayout= NO;
 }
 
 -(void)coverViewClick:(coverView*)sender
@@ -128,15 +133,23 @@
         }
     }
     
-    for (UIView * view in [self.superview subviews]) {
-        if (view.class == [coverView class]) {
-            [view removeFromSuperview];
-        }
-    }
     
     [self.delegate YWFilterPickerFinishedPickkingFilter:self.allFilters];
+    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
+    CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
+    //隐藏
+    [UIView animateWithDuration:0.3 animations:^{
+        self.frame = CGRectMake(screenWidth,0,0, screenHeight);
+        
+    } completion:^(BOOL finished) {
+        [self.coverView removeFromSuperview];
+        [self removeFromSuperview];
+        
+    }];
     
-    [self removeFromSuperview];
+    
+    
+   
 }
 
 -(void)btnCancelClick
