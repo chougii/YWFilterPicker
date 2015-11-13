@@ -59,8 +59,17 @@
 
 -(void)coverViewClick:(coverView*)sender
 {
-    [self removeFromSuperview];
-    [sender removeFromSuperview];
+    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
+    CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
+    //隐藏
+    [UIView animateWithDuration:0.3 animations:^{
+        self.frame = CGRectMake(screenWidth,0,0, screenHeight);
+        self.coverView.frame= CGRectMake(screenWidth,0,0, screenHeight);
+    } completion:^(BOOL finished) {
+        [self.coverView removeFromSuperview];
+        [self removeFromSuperview];
+        
+    }];
 }
 
 -(void)setCategorys:(NSMutableArray *)categorys
@@ -140,6 +149,7 @@
     //隐藏
     [UIView animateWithDuration:0.3 animations:^{
         self.frame = CGRectMake(screenWidth,0,0, screenHeight);
+        self.coverView.frame = CGRectMake(screenWidth,0,0, screenHeight);
         
     } completion:^(BOOL finished) {
         [self.coverView removeFromSuperview];
@@ -154,18 +164,20 @@
 
 -(void)btnCancelClick
 {
-    
+    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
+    CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
     //隐藏遮盖层
-    for (UIView * view in [self.superview subviews]) {
-        if (view.class == [coverView class]) {
-            [view removeFromSuperview];
-        }
+    [UIView animateWithDuration:0.3 animations:^{
+        self.frame = CGRectMake(screenWidth,0,0, screenHeight);
+        self.coverView.frame = CGRectMake(screenWidth,0,0, screenHeight);
         
-    }
+    } completion:^(BOOL finished) {
+        [self.delegate YWFilterPickerCancelled];
+        [self.coverView removeFromSuperview];
+        [self removeFromSuperview];
+        
+    }];
     
-    [self.delegate YWFilterPickerCancelled];
-    
-    [self removeFromSuperview];
 }
 
 

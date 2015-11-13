@@ -121,7 +121,12 @@
 
 -(void)btnCancelClick
 {
-    [self removeFromSuperview];
+    [self.delegate seleteFinishedCallBack:self.filters andFatherId:self.fatherId];
+    [UIView animateWithDuration:0.3 animations:^{
+        self.frame = CGRectMake(screenBounds.size.width, 0, 0, screenBounds.size.height);
+    } completion:^(BOOL finished) {
+        [self removeFromSuperview];
+    }];
 }
 
 -(void)setCategorys:(NSMutableArray *)categorys

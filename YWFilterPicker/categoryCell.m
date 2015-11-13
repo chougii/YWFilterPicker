@@ -45,7 +45,6 @@
 {
     UIButton * btn = [[UIButton alloc] init];
     btn.frame = CGRectMake([UIScreen mainScreen].bounds.size.width-90, 5, 30, 30);
-   // [btn setTitle:@"√" forState:UIControlStateNormal];
     [btn setImage:[UIImage imageNamed:@"select"] forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     self.rightBtn = btn;
