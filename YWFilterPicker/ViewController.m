@@ -53,10 +53,8 @@
 {
     
     YWFilterPicker * picker = [[YWFilterPicker alloc] init];
-    picker.frame = CGRectMake(50, 0, screenBounds.size.width-50, screenBounds.size.height);
     picker.delegate = self;
     picker.categorys = [self getData];
-    
     [self.view addSubview:picker];
     
     

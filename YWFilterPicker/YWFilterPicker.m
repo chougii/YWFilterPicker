@@ -25,8 +25,10 @@
 -(instancetype)init
 {
     if (self=[super init]) {
+        CGRect screenBounds = [UIScreen mainScreen].bounds;
         self.categorys = [NSMutableArray array];
         self.allFilters = [NSMutableDictionary dictionary];
+        self.frame = CGRectMake(50, 0, screenBounds.size.width-50, screenBounds.size.height);
         _isFirstLayout = YES;
     }
     return self;
