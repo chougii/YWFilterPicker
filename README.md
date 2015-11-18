@@ -11,7 +11,7 @@ step 1:
  添加头文件  
  Import the ficker header file "YWFilterPicker.h"   
 step 2:  
- 创建初始化并设置代理
+ 创建初始化并设置代理与字典数据
  Create、initialize and set the attributes and delegate     
  示例:  
  Example:  
