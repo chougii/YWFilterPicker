@@ -20,7 +20,8 @@ step 3:
  -(void)YWFilterPickerFinishedPickkingFilter:(NSDictionary *)Filter;  
  
  
-数据示例:  
+数据示例: 
+```
  -(NSDictionary *)getDictData  
 {  
     NSDictionary *dict = @{  
@@ -51,3 +52,4 @@ step 3:
                        }]};  
     return dict;  
 }  
+```
