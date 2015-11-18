@@ -10,10 +10,15 @@ step 2:
  Create、initialize and set the attributes and delegate     
  示例:  
  Example:  
+```
+-(void)setupFilterPicker
+{
     YWFilterPicker * picker = [[YWFilterPicker alloc] init];
     picker.delegate = self;
     picker.dictData = [self getDictData];
-    [self.view addSubview:picker];  
+    [self.view addSubview:picker];
+}
+```
 step 3:  
  编写代理方法 (点击确定时触发)   
  Create your delegate method.  
