@@ -1,9 +1,9 @@
 # YWFilterPicker
-![](http://www.damawaiyu.com/images/2.png)
-![](http://www.damawaiyu.com/images/3.png)
-![](http://www.damawaiyu.com/images/4.png)
-![](http://www.damawaiyu.com/images/5.png)
-![](http://www.damawaiyu.com/images/6.png)  
+![](http://www.damawaiyu.com/otherimg/2.png)
+![](http://www.damawaiyu.com/otherimg/3.png)
+![](http://www.damawaiyu.com/otherimg/4.png)
+![](http://www.damawaiyu.com/otherimg/5.png)
+![](http://www.damawaiyu.com/otherimg/6.png)  
 You can easily select the attributes of the list, and get the ID of the selected attributes.  
 你可以轻松选择列表的属性，并且获取选择的属性id  
 Use steps  
