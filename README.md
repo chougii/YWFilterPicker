@@ -3,7 +3,7 @@
 ![](http://www.damawaiyu.com/images/3.png)
 ![](http://www.damawaiyu.com/images/4.png)
 ![](http://www.damawaiyu.com/images/5.png)
-![](http://www.damawaiyu.com/images/6.png)
+![](http://www.damawaiyu.com/images/6.png)  
 You can easily select the attributes of the list, and get the ID of the selected attributes.  
 你可以轻松选择列表的属性，并且获取选择的属性id  
 Use steps  
