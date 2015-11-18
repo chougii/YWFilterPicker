@@ -22,7 +22,13 @@ step 2:
 step 3:  
  编写代理方法 (点击确定时触发)   
  Create your delegate method.  
- -(void)YWFilterPickerFinishedPickkingFilter:(NSDictionary *)Filter;  
+```
+/**
+ *  YWFilterPicker代理事件
+ *  @param 所选筛选条件字典->key:cid value:filterModels
+ */
+-(void)YWFilterPickerFinishedPickkingFilter:(NSDictionary *)Filter;
+```
  
  
 数据示例: 
