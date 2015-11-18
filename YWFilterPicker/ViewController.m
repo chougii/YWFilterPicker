@@ -8,7 +8,6 @@
 
 #import "ViewController.h"
 #import "YWFilterPicker.h"
-#import "filterModel.h"
 
 @interface ViewController ()<YWFilterPickerDelegate>{
     CGRect screenBounds;
@@ -51,40 +50,47 @@
  */
 -(void)filterPicker
 {
-    
     YWFilterPicker * picker = [[YWFilterPicker alloc] init];
     picker.delegate = self;
-    picker.categorys = [self getData];
+    picker.dictData = [self getDictData];
     [self.view addSubview:picker];
-    
-    
-    
 }
 
-/**
- *  分类数据
- *
- */
 
--(NSMutableArray *)getData
+-(NSDictionary *)getDictData
 {
-    NSMutableArray * arr = [NSMutableArray array];
-    for (int i =1; i<6; i++) {
-        filterModel * f = [[filterModel alloc] init];
-        f.cid = [NSString stringWithFormat:@"100%d",i];
-        f.cname =[NSString stringWithFormat:@"筛选条件%d",i];
-        f.cvaluemodels = [NSMutableArray array];
-        for (int j=1; j<7; j++) {
-            filterModel * c = [[filterModel alloc] init];
-            c.cid = [NSString stringWithFormat:@"200%d",j];
-            c.cname = [NSString stringWithFormat:@"%@-值%d",f.cname,j];
-            c.cvaluemodels = [NSMutableArray array];
-            [f.cvaluemodels addObject:c];
-        }
-        [arr addObject:f];
-    }
-    return arr;
+    NSDictionary *dict = @{
+                           @"filters" : @[
+                                   @{
+                                       @"cid" : @"c001",
+                                       @"cname":@"color",
+                                       @"cvaluemodels" : @[@{
+                                               @"cid" : @"c101",
+                                               @"cname" : @"white",
+                                               @"cvaluemodels":@""
+                                               },@{@"cid" : @"c102",
+                                                   @"cname" : @"black",
+                                                   @"cvaluemodels":@""}]
+                                       },
+                                   @{
+                                       @"cid":@"c002",
+                                       @"cname" : @"size",
+                                       @"cvaluemodels" : @[@{
+                                               @"cid" : @"c021",
+                                               @"cname" : @"M",
+                                               @"cvaluemodels":@""
+                                               },@{@"cid" : @"c022",
+                                                   @"cname" : @"L",
+                                                   @"cvaluemodels":@""
+                                                   },@{@"cid" : @"c023",
+                                                       @"cname" : @"XL",
+                                                       @"cvaluemodels":@""
+                                                       }]
+                                       }]};
+    return dict;
 }
+
+
 
 
 

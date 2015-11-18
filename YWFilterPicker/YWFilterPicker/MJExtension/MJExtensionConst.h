@@ -8,17 +8,26 @@
 #define MJExtensionDeprecated(instead) NS_DEPRECATED(2_0, 2_0, 2_0, 2_0, instead)
 
 // 构建错误
-#define MJExtensionBuildError(error, msg) \
-if (error) *error = [NSError errorWithDomain:msg code:250 userInfo:nil];
+#define MJExtensionBuildError(clazz, msg) \
+NSError *error = [NSError errorWithDomain:msg code:250 userInfo:nil]; \
+[clazz setMj_error:error];
+
+// 日志输出
+#ifdef DEBUG
+#define MJExtensionLog(...) NSLog(__VA_ARGS__)
+#else
+#define MJExtensionLog(...)
+#endif
 
 /**
  * 断言
  * @param condition   条件
  * @param returnValue 返回值
  */
-#define MJExtensionAssertError(condition, returnValue, error, msg) \
+#define MJExtensionAssertError(condition, returnValue, clazz, msg) \
+[clazz setMj_error:nil]; \
 if ((condition) == NO) { \
-    MJExtensionBuildError(error, msg); \
+    MJExtensionBuildError(clazz, msg); \
     return returnValue;\
 }
 
@@ -51,29 +60,29 @@ MJExtensionAssert2((param) != nil, returnValue)
 #define MJLogAllIvars \
 -(NSString *)description \
 { \
-    return [self keyValues].description; \
+    return [self mj_keyValues].description; \
 }
 #define MJExtensionLogAllProperties MJLogAllIvars
 
 /**
  *  类型（属性类型）
  */
-extern NSString *const MJTypeInt;
-extern NSString *const MJTypeShort;
-extern NSString *const MJTypeFloat;
-extern NSString *const MJTypeDouble;
-extern NSString *const MJTypeLong;
-extern NSString *const MJTypeLongLong;
-extern NSString *const MJTypeChar;
-extern NSString *const MJTypeBOOL1;
-extern NSString *const MJTypeBOOL2;
-extern NSString *const MJTypePointer;
+extern NSString *const MJPropertyTypeInt;
+extern NSString *const MJPropertyTypeShort;
+extern NSString *const MJPropertyTypeFloat;
+extern NSString *const MJPropertyTypeDouble;
+extern NSString *const MJPropertyTypeLong;
+extern NSString *const MJPropertyTypeLongLong;
+extern NSString *const MJPropertyTypeChar;
+extern NSString *const MJPropertyTypeBOOL1;
+extern NSString *const MJPropertyTypeBOOL2;
+extern NSString *const MJPropertyTypePointer;
 
-extern NSString *const MJTypeIvar;
-extern NSString *const MJTypeMethod;
-extern NSString *const MJTypeBlock;
-extern NSString *const MJTypeClass;
-extern NSString *const MJTypeSEL;
-extern NSString *const MJTypeId;
+extern NSString *const MJPropertyTypeIvar;
+extern NSString *const MJPropertyTypeMethod;
+extern NSString *const MJPropertyTypeBlock;
+extern NSString *const MJPropertyTypeClass;
+extern NSString *const MJPropertyTypeSEL;
+extern NSString *const MJPropertyTypeId;
 
 #endif

@@ -9,34 +9,20 @@
 #import "MJProperty.h"
 #import "MJFoundation.h"
 #import "MJExtensionConst.h"
-
-@implementation MJPropertyKey
-
-- (id)valueInObject:(id)object
-{
-    if ([object isKindOfClass:[NSDictionary class]] && self.type == MJPropertyKeyTypeDictionary) {
-        return object[self.name];
-    } else if ([object isKindOfClass:[NSArray class]] && self.type == MJPropertyKeyTypeArray) {
-        return [object count] ? object[self.name.intValue] : nil;
-    }
-    return nil;
-}
-
-@end
+#import <objc/message.h>
 
 @interface MJProperty()
-
 @property (strong, nonatomic) NSMutableDictionary *propertyKeysDict;
 @property (strong, nonatomic) NSMutableDictionary *objectClassInArrayDict;
-
 @end
 
 @implementation MJProperty
 
+#pragma mark - 懒加载
 - (NSMutableDictionary *)propertyKeysDict
 {
     if (!_propertyKeysDict) {
-        self.propertyKeysDict = [NSMutableDictionary dictionary];
+        _propertyKeysDict = [NSMutableDictionary dictionary];
     }
     return _propertyKeysDict;
 }
@@ -44,11 +30,12 @@
 - (NSMutableDictionary *)objectClassInArrayDict
 {
     if (!_objectClassInArrayDict) {
-        self.objectClassInArrayDict = [NSMutableDictionary dictionary];
+        _objectClassInArrayDict = [NSMutableDictionary dictionary];
     }
     return _objectClassInArrayDict;
 }
 
+#pragma mark - 缓存
 + (instancetype)cachedPropertyWithProperty:(objc_property_t)property
 {
     MJProperty *propertyObj = objc_getAssociatedObject(self, property);
@@ -60,6 +47,7 @@
     return propertyObj;
 }
 
+#pragma mark - 公共方法
 - (void)setProperty:(objc_property_t)property
 {
     _property = property;
@@ -71,9 +59,15 @@
     
     // 2.成员类型
     NSString *attrs = @(property_getAttributes(property));
+    NSUInteger dotLoc = [attrs rangeOfString:@","].location;
+    NSString *code = nil;
     NSUInteger loc = 1;
-    NSUInteger len = [attrs rangeOfString:@","].location - loc;
-    _type = [MJType cachedTypeWithCode:[attrs substringWithRange:NSMakeRange(loc, len)]];
+    if (dotLoc == NSNotFound) { // 没有,
+        code = [attrs substringFromIndex:loc];
+    } else {
+        code = [attrs substringWithRange:NSMakeRange(loc, dotLoc - loc)];
+    }
+    _type = [MJPropertyType cachedTypeWithCode:code];
 }
 
 /**
@@ -81,8 +75,8 @@
  */
 - (id)valueForObject:(id)object
 {
-    if (_type.KVCDisabled) return [NSNull null];
-    return [object valueForKey:_name];
+    if (self.type.KVCDisabled) return [NSNull null];
+    return [object valueForKey:self.name];
 }
 
 /**
@@ -90,18 +84,20 @@
  */
 - (void)setValue:(id)value forObject:(id)object
 {
-    if (_type.KVCDisabled || value == nil) return;
-    [object setValue:value forKey:_name];
+    if (self.type.KVCDisabled || value == nil) return;
+    [object setValue:value forKey:self.name];
 }
 
-/** 对应着字典中的key */
-- (void)setKey:(NSString *)key forClass:(Class)c
+/**
+ *  通过字符串key创建对应的keys
+ */
+- (NSArray *)propertyKeysWithStringKey:(NSString *)stringKey
 {
-    if (!key) return;
+    if (stringKey.length == 0) return nil;
     
-    // 如果有多级映射
-    NSArray *oldKeys = [key componentsSeparatedByString:@"."];
     NSMutableArray *propertyKeys = [NSMutableArray array];
+    // 如果有多级映射
+    NSArray *oldKeys = [stringKey componentsSeparatedByString:@"."];
     
     for (NSString *oldKey in oldKeys) {
         NSUInteger start = [oldKey rangeOfString:@"["].location;
@@ -131,16 +127,39 @@
             [propertyKeys addObject:propertyKey];
         }
     }
-    [self setPorpertyKeys:propertyKeys forClass:c];
+    
+    return propertyKeys;
+}
+
+/** 对应着字典中的key */
+- (void)setOriginKey:(id)originKey forClass:(Class)c
+{
+    if ([originKey isKindOfClass:[NSString class]]) { // 字符串类型的key
+        NSArray *propertyKeys = [self propertyKeysWithStringKey:originKey];
+        if (propertyKeys.count) {
+            [self setPorpertyKeys:@[propertyKeys] forClass:c];
+        }
+    } else if ([originKey isKindOfClass:[NSArray class]]) {
+        NSMutableArray *keyses = [NSMutableArray array];
+        for (NSString *stringKey in originKey) {
+            NSArray *propertyKeys = [self propertyKeysWithStringKey:stringKey];
+            if (propertyKeys.count) {
+                [keyses addObject:propertyKeys];
+            }
+        }
+        if (keyses.count) {
+            [self setPorpertyKeys:keyses forClass:c];
+        }
+    }
 }
 
 /** 对应着字典中的多级key */
 - (void)setPorpertyKeys:(NSArray *)propertyKeys forClass:(Class)c
 {
-    if (!propertyKeys) return;
+    if (propertyKeys.count == 0) return;
     self.propertyKeysDict[NSStringFromClass(c)] = propertyKeys;
 }
-- (NSArray *)propertyKeysFromClass:(Class)c
+- (NSArray *)propertyKeysForClass:(Class)c
 {
     return self.propertyKeysDict[NSStringFromClass(c)];
 }
@@ -151,7 +170,7 @@
     if (!objectClass) return;
     self.objectClassInArrayDict[NSStringFromClass(c)] = objectClass;
 }
-- (Class)objectClassInArrayFromClass:(Class)c
+- (Class)objectClassInArrayForClass:(Class)c
 {
     return self.objectClassInArrayDict[NSStringFromClass(c)];
 }

@@ -12,6 +12,7 @@
 #import "filterValueView.h"
 #import "fatherCell.h"
 #import "coverView.h"
+#import "MJExtension.h"
 @interface YWFilterPicker()<UITableViewDataSource,UITableViewDelegate,filterValueViewDelegate>
 @property (nonatomic,weak) UITableView * tableView;
 @property (nonatomic,strong) NSIndexPath * currentIndex;
@@ -74,11 +75,24 @@
     }];
 }
 
--(void)setCategorys:(NSMutableArray *)categorys
+-(void)setDictData:(NSDictionary *)dictData
 {
-    _categorys = categorys;
+    _dictData = dictData;
+    [filterModel mj_setupObjectClassInArray:^NSDictionary *{
+        return @{
+                 @"cvaluemodels" : @"filterModel",
+                 };
+    }];
+    _categorys = [filterModel mj_objectArrayWithKeyValuesArray:dictData[@"filters"]];
     [self.tableView reloadData];
 }
+
+//-(void)setCategorys:(NSMutableArray *)categorys
+//{
+//    _categorys = categorys;
+//    
+//    [self.tableView reloadData];
+//}
 
 //头部导航栏
 -(void)setupHeaderNavigation

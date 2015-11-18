@@ -22,8 +22,10 @@
 @interface YWFilterPicker : UIScrollView
 
 
-@property (nonatomic,weak) id<YWFilterPickerDelegate> delegate;
+@property (nonatomic,assign) id<YWFilterPickerDelegate> delegate;
 @property (nonatomic,strong) NSMutableArray * categorys;
+@property (nonatomic,copy) NSString * jsonData;
+@property (nonatomic,strong) NSDictionary * dictData;
 /**
  *  将数据转化成通用字典类型方便网络传值
  *=;

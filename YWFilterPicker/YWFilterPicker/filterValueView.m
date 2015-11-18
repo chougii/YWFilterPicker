@@ -30,7 +30,7 @@
         screenBounds = [UIScreen mainScreen].bounds;
         self.fatherId = fatherId;
         self.filters = [NSMutableArray array];
-        self.categorys = [NSMutableArray array];
+        _categorys = [NSMutableArray array];
         self.categoryName = fathername;
     }
     return self;
@@ -132,7 +132,9 @@
 -(void)setCategorys:(NSMutableArray *)categorys
 {
     _categorys =  categorys;
+    
     int temp = 0;
+    filterModel * ff = categorys[0];
     for (filterModel * fm in _categorys) {
         if ([fm.cid isEqual:@"0"]) {
             temp = 1;

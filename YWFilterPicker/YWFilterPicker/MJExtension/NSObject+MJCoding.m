@@ -7,21 +7,22 @@
 //
 
 #import "NSObject+MJCoding.h"
+#import "NSObject+MJClass.h"
 #import "NSObject+MJProperty.h"
 #import "MJProperty.h"
 
 @implementation NSObject (MJCoding)
 
-- (void)encode:(NSCoder *)encoder
+- (void)mj_encode:(NSCoder *)encoder
 {
-    Class aClass = [self class];
+    Class clazz = [self class];
     
-    NSArray *allowedCodingPropertyNames = [aClass totalAllowedCodingPropertyNames];
-    NSArray *ignoredCodingPropertyNames = [aClass totalIgnoredCodingPropertyNames];
+    NSArray *allowedCodingPropertyNames = [clazz mj_totalAllowedCodingPropertyNames];
+    NSArray *ignoredCodingPropertyNames = [clazz mj_totalIgnoredCodingPropertyNames];
     
-    [aClass enumerateProperties:^(MJProperty *property, BOOL *stop) {
-        if (allowedCodingPropertyNames.count && ![allowedCodingPropertyNames containsObject:property.name]) return;
+    [clazz mj_enumerateProperties:^(MJProperty *property, BOOL *stop) {
         // 检测是否被忽略
+        if (allowedCodingPropertyNames.count && ![allowedCodingPropertyNames containsObject:property.name]) return;
         if ([ignoredCodingPropertyNames containsObject:property.name]) return;
         
         id value = [property valueForObject:self];
@@ -30,19 +31,22 @@
     }];
 }
 
-- (void)decode:(NSCoder *)decoder
+- (void)mj_decode:(NSCoder *)decoder
 {
-    Class aClass = [self class];
+    Class clazz = [self class];
     
-    NSArray *allowedCodingPropertyNames = [aClass totalAllowedCodingPropertyNames];
-    NSArray *ignoredCodingPropertyNames = [aClass totalIgnoredCodingPropertyNames];
+    NSArray *allowedCodingPropertyNames = [clazz mj_totalAllowedCodingPropertyNames];
+    NSArray *ignoredCodingPropertyNames = [clazz mj_totalIgnoredCodingPropertyNames];
     
-    [aClass enumerateProperties:^(MJProperty *property, BOOL *stop) {
-        if (allowedCodingPropertyNames.count && ![allowedCodingPropertyNames containsObject:property.name]) return;
+    [clazz mj_enumerateProperties:^(MJProperty *property, BOOL *stop) {
         // 检测是否被忽略
+        if (allowedCodingPropertyNames.count && ![allowedCodingPropertyNames containsObject:property.name]) return;
         if ([ignoredCodingPropertyNames containsObject:property.name]) return;
         
         id value = [decoder decodeObjectForKey:property.name];
+        if (value == nil) { // 兼容以前的MJExtension版本
+            value = [decoder decodeObjectForKey:[@"_" stringByAppendingString:property.name]];
+        }
         if (value == nil) return;
         [property setValue:value forObject:self];
     }];
