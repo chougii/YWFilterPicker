@@ -1,5 +1,4 @@
 # YWFilterPicker
-京东筛选
 ![](http://www.damawaiyu.com/images/2.png)
 ![](http://www.damawaiyu.com/images/3.png)
 ![](http://www.damawaiyu.com/images/4.png)
