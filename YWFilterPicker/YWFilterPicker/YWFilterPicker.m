@@ -47,7 +47,7 @@
         [UIView setAnimationDuration:0.3];
         view.frame=[UIScreen mainScreen].bounds;
         view.backgroundColor = [[UIColor clearColor] colorWithAlphaComponent:0.7];
-        [view addTarget:self action:@selector(coverViewClick:) forControlEvents:UIControlEventTouchUpInside];
+        [view addTarget:self action:@selector(btnCancelClick) forControlEvents:UIControlEventTouchUpInside];
         self.coverView = view;
         [UIView commitAnimations];
         [self.superview addSubview:view];
@@ -58,21 +58,6 @@
 
     }
     _isFirstLayout= NO;
-}
-
--(void)coverViewClick:(coverView*)sender
-{
-    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
-    CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
-    //隐藏
-    [UIView animateWithDuration:0.3 animations:^{
-        self.frame = CGRectMake(screenWidth,0,0, screenHeight);
-        self.coverView.frame= CGRectMake(screenWidth,0,0, screenHeight);
-    } completion:^(BOOL finished) {
-        [self.coverView removeFromSuperview];
-        [self removeFromSuperview];
-        
-    }];
 }
 
 -(void)setDictData:(NSDictionary *)dictData

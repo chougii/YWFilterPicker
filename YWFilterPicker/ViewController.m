@@ -60,44 +60,38 @@
 -(NSDictionary *)getDictData
 {
     NSDictionary *dict = @{
-                           @"filters" : @[
-                                   @{
-                                       @"cid" : @"c001",
-                                       @"cname":@"color",
-                                       @"cvaluemodels" : @[@{
-                                               @"cid" : @"c101",
-                                               @"cname" : @"white",
-                                               @"cvaluemodels":@""
-                                               },@{@"cid" : @"c102",
-                                                   @"cname" : @"black",
-                                                   @"cvaluemodels":@""}]
-                                       },
-                                   @{
-                                       @"cid":@"c002",
-                                       @"cname" : @"size",
-                                       @"cvaluemodels" : @[@{
-                                               @"cid" : @"c021",
-                                               @"cname" : @"M",
-                                               @"cvaluemodels":@""
-                                               },@{@"cid" : @"c022",
-                                                   @"cname" : @"L",
-                                                   @"cvaluemodels":@""
-                                                   },@{@"cid" : @"c023",
-                                                       @"cname" : @"XL",
-                                                       @"cvaluemodels":@""
-                                                       }]
-                                       }]};
+       @"filters" : @[@{
+                   @"cid" : @"c001",
+                   @"cname":@"color",
+                   @"cvaluemodels" : @[@{
+                       @"cid" : @"c101",
+                       @"cname" : @"white",
+                       @"cvaluemodels":@""
+                       },@{@"cid" : @"c102",
+                           @"cname" : @"black",
+                           @"cvaluemodels":@""}]},
+                    @{
+                       @"cid":@"c002",
+                       @"cname" : @"size",
+                       @"cvaluemodels" : @[@{
+                               @"cid" : @"c021",
+                               @"cname" : @"M",
+                               @"cvaluemodels":@""
+                               },@{@"cid" : @"c022",
+                                   @"cname" : @"L",
+                                   @"cvaluemodels":@""
+                                   },@{@"cid" : @"c023",
+                                       @"cname" : @"XL",
+                                       @"cvaluemodels":@""
+                                       }]
+                       }]};
     return dict;
 }
 
-
-
-
-
 /**
- *  添加代理事件
+ *  YWFilterPicker代理事件
  *
- *  @param Filter Dictionary 筛选条件字典->key:cid value:filterModels
+ *  @param 所选筛选条件字典->key:cid value:filterModels
  */
 -(void)YWFilterPickerFinishedPickkingFilter:(NSDictionary *)Filter
 {
